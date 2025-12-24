@@ -1,0 +1,67 @@
+/* ---------- PAGE BOX ---------- */
+.admins-page {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+/* ---------- TITLE ---------- */
+.admins-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+/* ---------- ADD BUTTON ---------- */
+.add-admin-btn {
+  background-color: #10b981;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  float: right;
+}
+
+.add-admin-btn:hover {
+  background-color: #059669;
+}
+
+/* ---------- TABLE ---------- */
+.admins-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.admins-table th,
+.admins-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 15px;
+}
+
+.admins-table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.admins-table tr:hover {
+  background-color: #f9fafb;
+}
+
+/* ---------- EMPTY MESSAGE ---------- */
+.no-admins {
+  text-align: center;
+  font-size: 16px;
+  padding: 20px;
+  color: #6b7280;
+}

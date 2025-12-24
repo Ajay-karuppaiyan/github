@@ -1,0 +1,115 @@
+/* Full-Screen AddUser Modal Overlay */
+.add-user-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Card */
+.add-user-card {
+  background: #fff;
+  width: 100%;
+  max-width: 500px; /* limit width */
+  height: 90%;      /* almost full screen, leaves space for scroll */
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* scroll if content overflows */
+  position: relative;
+}
+
+/* Modal Header */
+.add-user-card h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 25px;
+  color: #1f2937;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding-bottom: 10px;
+  z-index: 10;
+}
+
+/* Input and Select Fields */
+.add-user-card input,
+.add-user-card select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.add-user-card input:focus,
+.add-user-card select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+}
+
+/* Buttons Container */
+.add-user-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: auto; /* push buttons to bottom */
+}
+
+.add-user-buttons button {
+  padding: 8px 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+/* Add Button */
+.add-user-buttons button:first-child {
+  background: #10b981;
+  color: #fff;
+}
+
+.add-user-buttons button:first-child:hover {
+  background: #059669;
+}
+
+/* Cancel Button */
+.add-user-buttons button:last-child {
+  background: #ef4444;
+  color: #fff;
+}
+
+.add-user-buttons button:last-child:hover {
+  background: #b91c1c;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .add-user-card {
+    width: 95%;
+    height: 95%;
+    padding: 15px 20px;
+  }
+
+  .add-user-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .add-user-buttons button {
+    width: 100%;
+  }
+}

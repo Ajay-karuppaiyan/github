@@ -1,0 +1,83 @@
+/* Page layout */
+.signin-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f6f8;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Card */
+.signin-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  padding: 28px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Title */
+.signin-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Inputs */
+.signin-card input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.signin-card input:focus {
+  border-color: #2563eb;
+}
+
+/* Button */
+.signin-card button {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.signin-card button:hover {
+  background-color: #1e4fd8;
+}
+
+.signin-card button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Text & links */
+.signin-card p {
+  margin-top: 12px;
+  font-size: 13px;
+  text-align: center;
+  color: #374151;
+}
+
+.signin-card span {
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.signin-card span:hover {
+  text-decoration: underline;
+}
