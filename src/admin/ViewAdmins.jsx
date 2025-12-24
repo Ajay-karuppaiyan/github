@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AddAdmin from "./AddAdmin";
 import EditUser from "./EditUser"; // reuse same EditUser component
-import "./ViewUsers.css";
+import "./styles/ViewUsers.css";
 
 export default function ViewAdmins({ setPage, setSelectedUser }) {
   const [admins, setAdmins] = useState([]);
@@ -12,7 +12,7 @@ export default function ViewAdmins({ setPage, setSelectedUser }) {
   }, []);
 
   const fetchAdmins = () => {
-    fetch("http://localhost:5050/api/auth/users")
+    fetch("http://localhost:8000/api/auth/getAll")
       .then((res) => res.json())
       .then((data) => {
         const onlyAdmins = data.filter(
@@ -23,14 +23,15 @@ export default function ViewAdmins({ setPage, setSelectedUser }) {
   };
 
   function editAdmin(admin) {
-    setSelectedUser(admin);
-    setPage("editUser");
+  setSelectedUser(admin);
+  setPage("editAdmin");
   }
+
 
   function deleteAdmin(id) {
     if (!window.confirm("Delete this admin?")) return;
 
-    fetch(`http://localhost:5050/api/auth/user/delete/${id}`, {
+    fetch(`http://localhost:8000/api/auth/delete/${id}`, {
       method: "DELETE",
     })
       .then((res) => {
@@ -79,7 +80,7 @@ export default function ViewAdmins({ setPage, setSelectedUser }) {
           )}
 
           {admins.map((admin) => (
-            <tr key={admin._id}>
+            <tr key={admin.id}>
               <td>{admin.name}</td>
               <td>{admin.email}</td>
               <td>{admin.mobile}</td>
@@ -87,7 +88,7 @@ export default function ViewAdmins({ setPage, setSelectedUser }) {
               <td>{admin.role}</td>
               <td>
                 <button onClick={() => editAdmin(admin)}>Edit</button>
-                <button onClick={() => deleteAdmin(admin._id)}>Delete</button>
+                <button onClick={() => deleteAdmin(admin.id)}>Delete</button>
               </td>
             </tr>
           ))}

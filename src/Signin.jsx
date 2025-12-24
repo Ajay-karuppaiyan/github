@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import "./Signin.css";
 
 export default function Signin() {
@@ -17,43 +18,53 @@ export default function Signin() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-async function handleSubmit(e) {
-  e.preventDefault();
-  setError("");
-  setLoading(true);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-  try {
-    const response = await fetch("http://localhost:8000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (!response.ok) {
-      const text = await response.text();
-      setError(text);
-      setLoading(false);
-      return;
+      if (!response.ok) {
+        const text = await response.text();
+        setError(text);
+        setLoading(false);
+        return;
+      }
+
+      // ✅ JWT as plain text
+      const token = await response.text();
+      console.log("JWT TOKEN:", token);
+
+      // ✅ Decode token
+      const decoded = jwtDecode(token);
+
+      // ✅ Save token & role
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", decoded.role);
+      localStorage.setItem("isLoggedIn", "true");
+
+      alert("Login successful");
+
+      // ✅ ROLE-BASED NAVIGATION
+      if (decoded.role === "ADMIN") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+
+    } catch (err) {
+      console.error(err);
+      setError("Server error. Please try again.");
     }
 
-    // Backend returns raw JWT string
-    const token = await response.text();
-
-    // Save token to localStorage
-    localStorage.setItem("token", token);
-    localStorage.setItem("isLoggedIn", "true");
-
-    alert("Login successful");
-
-    // Navigate to Admin Panel
-    navigate("/admin");
-  } catch (err) {
-    console.error(err);
-    setError("Server error. Please try again.");
+    setLoading(false);
   }
-
-  setLoading(false);
-}
 
   return (
     <div className="signin-container">
@@ -83,17 +94,9 @@ async function handleSubmit(e) {
             {loading ? "Signing in..." : "Sign In"}
           </button>
 
-          {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-
-          <p style={{ textAlign: "center", marginTop: "10px" }}>
-            Don't have an account?{" "}
-            <span
-              style={{ color: "blue", cursor: "pointer" }}
-              onClick={() => navigate("/signup")}
-            >
-              Signup
-            </span>
-          </p>
+          {error && (
+            <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+          )}
         </form>
       </div>
     </div>

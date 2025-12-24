@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AddUser from "./AddUser"; // Full screen modal
-import "./ViewUsers.css";
+import "./styles/ViewUsers.css";
 
 export default function ViewUsers({ setPage, setSelectedUser }) {
   const [users, setUsers] = useState([]);
@@ -11,7 +11,7 @@ export default function ViewUsers({ setPage, setSelectedUser }) {
   }, []);
 
   const fetchUsers = () => {
-    fetch("http://localhost:5050/api/auth/users")
+    fetch("http://localhost:8000/api/auth/getAll")
       .then((res) => res.json())
       .then((data) => {
         const onlyUsers = data.filter((u) => {
@@ -30,7 +30,7 @@ export default function ViewUsers({ setPage, setSelectedUser }) {
   function deleteUser(id) {
   if (!window.confirm("Delete this user?")) return;
 
-  fetch(`http://localhost:5050/api/auth/user/delete/${id}`, {
+  fetch(`http://localhost:8000/api/auth/delete/${id}`, {
     method: "DELETE",
   })
     .then((res) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./Attendance.css";
+import "./Styles/Attendance.css";
 
 export default function Attendance() {
   const [users, setUsers] = useState([]);
@@ -14,7 +14,7 @@ export default function Attendance() {
   // 🔹 Fetch attendance users
   const fetchAttendance = async () => {
     try {
-      const res = await fetch("http://localhost:5050/api/auth/attendance");
+      const res = await fetch("http://localhost:8000/api/auth/attendance");
       const data = await res.json();
       setUsers(data || []);
     } catch (err) {
@@ -32,7 +32,7 @@ export default function Attendance() {
   const markAttendance = async (userId) => {
     try {
       const res = await fetch(
-        `http://localhost:5050/api/auth/attendance/${userId}`,
+        `http://localhost:8000/api/auth/attendance/${userId}`,
         { method: "POST" }
       );
       const data = await res.json();

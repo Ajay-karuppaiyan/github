@@ -1,12 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Signup from "./Signup";
 import Signin from "./Signin";
 import Dashboard from "./Dashboard";
+
 import AdminPanel from "./admin/AdminPanel";
 import AddUser from "./admin/AddUser";
 import AddAdmin from "./admin/AddAdmin";
+import EditUser from "./admin/EditUser";
+import EditAdmin from "./admin/EditAdmin";
+
 import ProtectedRoute from "./ProtectedRoute";
-import AdminRoute from "./AdminRoute.jsx";
+import AdminRoute from "./AdminRoute";
 
 function App() {
   return (
@@ -30,7 +35,7 @@ function App() {
           }
         />
 
-        {/* Admin Routes */}
+        {/* Admin Panel */}
         <Route
           path="/admin"
           element={
@@ -40,6 +45,7 @@ function App() {
           }
         />
 
+        {/* Admin - Users */}
         <Route
           path="/admin/add-user"
           element={
@@ -50,10 +56,29 @@ function App() {
         />
 
         <Route
+          path="/admin/edit-user/:id"
+          element={
+            <AdminRoute>
+              <EditUser />
+            </AdminRoute>
+          }
+        />
+
+        {/* Admin - Admins */}
+        <Route
           path="/admin/add-admin"
           element={
             <AdminRoute>
               <AddAdmin />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/edit-admin/:id"
+          element={
+            <AdminRoute>
+              <EditAdmin />
             </AdminRoute>
           }
         />
