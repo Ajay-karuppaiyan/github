@@ -13,8 +13,11 @@ export default function Attendance() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
   // ================= FETCH ALL USERS ATTENDANCE =================
   const fetchAttendance = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/attendance`);
 
@@ -25,7 +28,6 @@ export default function Attendance() {
       }
 
       const data = await res.json();
-      console.log("Attendance data:", data); // DEBUG
       setUsers(data);
     } catch (err) {
       console.error("Failed to fetch attendance", err);
@@ -42,10 +44,9 @@ export default function Attendance() {
   // ================= MARK ATTENDANCE =================
   const markAttendance = async (userId) => {
     try {
-      const res = await fetch(
-        `${API_BASE}/attendance/${userId}`,
-        { method: "POST" }
-      );
+      const res = await fetch(`${API_BASE}/attendance/${userId}`, {
+        method: "POST",
+      });
 
       const data = await res.json();
 
@@ -66,13 +67,11 @@ export default function Attendance() {
     let attendance = user.attendance || [];
 
     if (filterType === "date" && singleDate) {
-      attendance = attendance.filter(d => d === singleDate);
+      attendance = attendance.filter((d) => d === singleDate);
     }
 
     if (filterType === "period" && startDate && endDate) {
-      attendance = attendance.filter(
-        d => d >= startDate && d <= endDate
-      );
+      attendance = attendance.filter((d) => d >= startDate && d <= endDate);
     }
 
     return { ...user, attendance };
@@ -155,9 +154,10 @@ export default function Attendance() {
               <td>
                 <button
                   className="mark-btn"
+                  disabled={user.attendance.includes(today)}
                   onClick={() => markAttendance(user.id)}
                 >
-                  Mark Today
+                  {user.attendance.includes(today) ? "Marked" : "Mark Today"}
                 </button>
               </td>
             </tr>
