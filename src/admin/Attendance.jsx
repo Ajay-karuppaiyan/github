@@ -1,24 +1,35 @@
 import { useEffect, useState } from "react";
 import "./Styles/Attendance.css";
 
+const API_BASE = "http://localhost:8000/api/auth";
+
 export default function Attendance() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter states
-  const [filterType, setFilterType] = useState("date"); // 'date' or 'period'
+  // Filters
+  const [filterType, setFilterType] = useState("date");
   const [singleDate, setSingleDate] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // 🔹 Fetch attendance users
+  // ================= FETCH ALL USERS ATTENDANCE =================
   const fetchAttendance = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/auth/attendance");
+      const res = await fetch(`${API_BASE}/attendance`);
+
+      if (!res.ok) {
+        console.error("Failed to fetch attendance:", res.status);
+        setUsers([]);
+        return;
+      }
+
       const data = await res.json();
-      setUsers(data || []);
+      console.log("Attendance data:", data); // DEBUG
+      setUsers(data);
     } catch (err) {
       console.error("Failed to fetch attendance", err);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -28,49 +39,57 @@ export default function Attendance() {
     fetchAttendance();
   }, []);
 
-  // 🔹 Mark attendance
+  // ================= MARK ATTENDANCE =================
   const markAttendance = async (userId) => {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/auth/attendance/${userId}`,
+        `${API_BASE}/attendance/${userId}`,
         { method: "POST" }
       );
+
       const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Failed to mark attendance");
+        return;
+      }
+
       alert(data.message);
-      fetchAttendance(); // refresh
+      fetchAttendance(); // refresh list
     } catch (err) {
-      console.error("Failed to mark attendance", err);
+      console.error("Mark attendance failed", err);
     }
   };
 
-  // 🔹 Filter users based on selected filter type
+  // ================= FILTER LOGIC =================
   const filteredUsers = users.map((user) => {
-    let filteredAttendance = user.attendance || [];
+    let attendance = user.attendance || [];
 
     if (filterType === "date" && singleDate) {
-      filteredAttendance = filteredAttendance.filter((d) => d === singleDate);
-    } else if (
-      filterType === "period" &&
-      startDate &&
-      endDate
-    ) {
-      filteredAttendance = filteredAttendance.filter(
-        (d) => d >= startDate && d <= endDate
+      attendance = attendance.filter(d => d === singleDate);
+    }
+
+    if (filterType === "period" && startDate && endDate) {
+      attendance = attendance.filter(
+        d => d >= startDate && d <= endDate
       );
     }
 
-    return { ...user, attendance: filteredAttendance };
+    return { ...user, attendance };
   });
 
-  if (loading) return <p style={{ padding: "20px" }}>Loading attendance...</p>;
+  if (loading) {
+    return <p style={{ padding: "20px" }}>Loading attendance...</p>;
+  }
 
+  // ================= UI =================
   return (
     <div className="attendance">
       <div className="attendance-header">
-        <h2>User Attendance</h2>
+        <h2>Manage Attendance</h2>
 
         <div className="filter">
-          <label>Filter Type:</label>
+          <label>Filter:</label>
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
@@ -110,7 +129,7 @@ export default function Attendance() {
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Attendance</th>
+            <th>Attendance Dates</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -125,18 +144,18 @@ export default function Attendance() {
           )}
 
           {filteredUsers.map((user) => (
-            <tr key={user._id || user.id}>
+            <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
               <td>
-                {user.attendance && user.attendance.length > 0
+                {user.attendance.length > 0
                   ? user.attendance.join(", ")
                   : "No records"}
               </td>
               <td>
                 <button
                   className="mark-btn"
-                  onClick={() => markAttendance(user._id || user.id)}
+                  onClick={() => markAttendance(user.id)}
                 >
                   Mark Today
                 </button>
