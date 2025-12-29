@@ -19,16 +19,23 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // Signup
     public User signup(User user) throws Exception {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new Exception("Email already exists");
         }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
+
         return userRepository.save(user);
     }
 
-    // Login
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
     public String login(String email, String password) throws Exception {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("User not found"));
@@ -37,6 +44,7 @@ public class AuthService {
             throw new Exception("Invalid password");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        // ✅ ROLE INCLUDED
+        return jwtUtil.generateToken(user.getEmail(), user.getRole());
     }
 }
